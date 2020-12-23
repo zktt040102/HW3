@@ -1,22 +1,22 @@
-#include <stdio.h>                      //standard C stuffs
-#include <stdlib.h>                     //malloc
-#include <errno.h>                      //error code
-#include <stdbool.h>                    //boolean type and values
-#include <string.h>                     //strlen
-#include <sys/socket.h>                 //main sockets header
-#include <arpa/inet.h>                  //internet operations definitions
-#include </usr/include/netinet/ip.h>    //ipv4 protocols
-#include </usr/include/netinet/ip6.h>   //ipv6 protocols
-#include </usr/include/pcap/pcap.h>     //pcap library
-#include <net/ethernet.h>               //ethernet fundamental onstants
-#include <netinet/in.h>                 //internet protocol family
-#include <netinet/if_ether.h>           //ethernet header declarations
-#include <netinet/ether.h>              //ethernet header declarations
-#include <netinet/tcp.h>                //tcp header declarations
-#include <netinet/udp.h>                //udp header declarations
-#include <netinet/ip_icmp.h>            //icmp header declarations
-#include <netinet/icmp6.h>              //icmpv6 header declarations
-#include <time.h>     
+#include <stdio.h>                      
+#include <stdlib.h>                     
+#include <errno.h>                      
+#include <stdbool.h>                    
+#include <string.h>                    
+#include <sys/socket.h>                 
+#include <arpa/inet.h>                  
+#include </usr/include/netinet/ip.h>    
+#include </usr/include/netinet/ip6.h>   
+#include </usr/include/pcap/pcap.h>     
+#include <net/ethernet.h>               
+#include <netinet/in.h>                 
+#include <netinet/if_ether.h>          
+#include <netinet/ether.h>              
+#include <netinet/tcp.h>                
+#include <netinet/udp.h>                
+#include <netinet/ip_icmp.h>            
+#include <netinet/icmp6.h>              
+   
 
 /* Prototypes */
 void handle_packet(u_char *, const struct pcap_pkthdr *, const u_char *);
@@ -47,8 +47,8 @@ char destIP6[INET_ADDRSTRLEN];  //destination address
 
 struct time_val
 {
-long tv_sec;         /* seconds 含义同 time_t 对象的值 */
-long tv_usec;        /* and microseconds */
+long tv_sec;         
+long tv_usec;        
 };
 
 struct pcap_pkthdr *ptk_header;
@@ -116,18 +116,10 @@ int main(int argc, char *argv[])
     //open pacp file
     handle = pcap_open_offline(fname, errbuf);
 
-    FILE *fp;
-
     //if pacp file has errors
     if(handle == NULL){
 	printf("pcap file [%s] with error %s \n", fname, errbuf);
 	exit(EXIT_FAILURE);
-    }
-
-    fp = fopen(fname,"r");
-    if(fread(ptk_header, 16, 1, fp) != 1) //读pcap数据包头结构
-    {
-	return 0;
     }
 
     //pacp loop to set our callback function
@@ -368,9 +360,6 @@ void print_ipv6()
     printf("Ether Type: IPv6 \n");
     printf("From: %s \n", sourIP6);
     printf("To: %s \n", destIP6);
-    //strftime(my_time, sizeof(my_time), "%Y-%m-%d %T", localtime(&(ptk_header->ts.tv_sec)));
-    printf("Time: %s \n", ctime((const time_t*)&ptk_header->ts.tv_sec));
-
     printf("Extension Headers:");
 }
 
@@ -466,8 +455,6 @@ void print_ipv4(char *source, char *dest)
     printf("Packet #: %d \n", packet_counter);
     printf("Ether Type: IPv4 \n");
     printf("From: %s \n", source);
-    //strftime(my_time, sizeof(my_time), "%Y-%m-%d %T", localtime(&(ptk_header->ts.tv_sec)));
-    printf("Time: %s \n", ctime((const time_t*)&ptk_header->ts.tv_sec));
     printf("To: %s \n", dest);
     
 }
